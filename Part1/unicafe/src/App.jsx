@@ -33,9 +33,20 @@ const Statistics = (props) => {
   )
 }
 
+const Anecdote = (props) => {
+  const {anecdotes, anecdoteSelected, votes} = props
+  if (isNaN(votes[anecdoteSelected])) {votes[anecdoteSelected] = 0}
+  return (
+    <div>
+      <p>{anecdotes[anecdoteSelected]}</p>
+      <p>Has {votes[anecdoteSelected]} votes</p>
+    </div>
+  )
+}
+
 const App = () => {
 
-    const anecdotes = [
+  const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
     'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
@@ -53,6 +64,7 @@ const App = () => {
   const [total, setTotal] = useState(0)
   const [score, setScore] = useState(0)
   const [anecdoteSelected, setAnecdoteSelected] = useState(0)
+  const [votes, setVotes] = useState([])
 
   const handlePositiveClick = () => {
     setGood(good+1)
@@ -74,12 +86,17 @@ const App = () => {
     setAnecdoteSelected(randomIndex)
   }
 
+  const handleVote = () => {
+    const newVotes = [...votes]
+    newVotes[anecdoteSelected] += 1
+    setVotes(newVotes)
+  }
+
   return (
     <div>
       <Header text = 'Anecdote'/>
-      <div>
-        {anecdotes[anecdoteSelected]}
-      </div>
+      <Anecdote anecdotes={anecdotes} anecdoteSelected={anecdoteSelected} votes={votes}/>
+      <Button onClick={handleVote} text = 'vote'/>
       <Button onClick={handleAnecdoteSelected} text='next anecdote'/>
       <Header text='give feedback'/>
       <Button onClick={handlePositiveClick} text='good'/>
