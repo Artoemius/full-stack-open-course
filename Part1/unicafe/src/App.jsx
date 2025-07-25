@@ -65,6 +65,8 @@ const App = () => {
   const [score, setScore] = useState(0)
   const [anecdoteSelected, setAnecdoteSelected] = useState(0)
   const [votes, setVotes] = useState([])
+  const [maxVotes, setMaxVotes] = useState(0)
+  const [bestAnecdote, setBestAnecdote] = useState(0)
 
   const handlePositiveClick = () => {
     setGood(good+1)
@@ -90,14 +92,20 @@ const App = () => {
     const newVotes = [...votes]
     newVotes[anecdoteSelected] += 1
     setVotes(newVotes)
+    if (newVotes[anecdoteSelected] > maxVotes) {
+      setMaxVotes(newVotes[anecdoteSelected])
+      setBestAnecdote(anecdoteSelected)
+    }
   }
 
   return (
     <div>
-      <Header text = 'Anecdote'/>
+      <Header text = 'Anecdote of the day'/>
       <Anecdote anecdotes={anecdotes} anecdoteSelected={anecdoteSelected} votes={votes}/>
       <Button onClick={handleVote} text = 'vote'/>
       <Button onClick={handleAnecdoteSelected} text='next anecdote'/>
+      <Header text = 'Anecdote with most votes'/>
+      <Anecdote anecdotes={anecdotes} anecdoteSelected={bestAnecdote} votes={votes}/>
       <Header text='give feedback'/>
       <Button onClick={handlePositiveClick} text='good'/>
       <Button onClick={handleNeutralClick} text='neutral'/>
